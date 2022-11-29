@@ -12,7 +12,6 @@ Getter methods used to extract specific data from an html source
 '''
 def getTitle(url):
     try:
-        # Default
         html_code = getSiteHtml(url)
         page_title = html_code.title
     except HTTPError as e:
@@ -27,7 +26,6 @@ def getTitle(url):
 
 def getSiteHtml(url):
     try:
-        # Default
         html = urlopen(url)
         bs = BeautifulSoup(html, 'html.parser')
     except HTTPError as e:
@@ -39,10 +37,7 @@ def getSiteHtml(url):
 
 def getTags(url, tag, attribute):
     try:
-        # Default
         html_code = getSiteHtml(url)
-
-        # Best method
         heading_list_alt = html_code.find_all(tag, attribute)
     except HTTPError as e:
         print(e)
@@ -53,9 +48,7 @@ def getTags(url, tag, attribute):
 
 def getTag(url, tag, attribute):
     try:
-        # Default
         html_code = getSiteHtml(url)
-        # Best method
         heading = html_code.find(tag, attribute)
     except HTTPError as e:
         print(e)
@@ -99,6 +92,7 @@ Boolean methods
 '''
 def isEmpty(some_list):
     return (True if len(some_list) == 0 else False)
+
 def hasHref(attribute_list):
     bool = False
     for i in attribute_list:
@@ -106,6 +100,15 @@ def hasHref(attribute_list):
             bool = True
             break
     return bool
+
+'''
+Other methods
+'''
+def numTags(html_code):
+    count = 0
+    for i in html_code:
+        count += 1
+    return count
 
 '''
 Redundant methods
@@ -120,9 +123,11 @@ def getPreviousSibling(tag,attribute,url):
     return html_code.find(tag, attribute).previous_sibling
 
 def main():
-    url = 'https://en.wikipedia.org/wiki/76_mm_tank_gun_M1940_F-34'
+    url = 'https://en.wikipedia.org/wiki/M26_Pershing'
 
     print('\n---Title---\n', getTitle(url))
+
+    print('\n---Number of tags---\n', numTags(urlopen(url)))
 
     print('\n---Sample HTML---\n',getSiteHtml(url))
 
