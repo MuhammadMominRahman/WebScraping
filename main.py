@@ -63,13 +63,13 @@ def getEmails(url):
     html_code = getSiteHtml(url)
     email_format = re.compile('[A-Za-z0-9\._+]+@[A-Za-z]+\.(com|org|edu|net)')
     emails = [x.strip(' \n') for x in html_code.find_all(text=email_format)]
-    return emails
+    return (["None"] if isEmpty(emails) == True else emails)
 
 def getPhoneNumbers(url):
     html_code = getSiteHtml(url)
     number_format = re.compile('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
     numbers = [x.strip(' \n') for x  in html_code.find_all(text=number_format)]
-    return numbers
+    return (["None"] if isEmpty(numbers) == True else numbers)
 
 def getLinks(url):
     html_code = getSiteHtml(url)
@@ -96,7 +96,8 @@ def getNextSiblings(tag, attribute, url):
 def getPreviousSiblings(tag,attribute,url):
     html_code = getSiteHtml(url)
     return [x for x in html_code.find(tag, attribute).previous_siblings]
-
+def isEmpty(some_list):
+    return (True if len(some_list) == 0 else False)
 '''
 Redundant methods
 '''
@@ -110,18 +111,19 @@ def getPreviousSibling(tag,attribute,url):
     return html_code.find(tag, attribute).previous_sibling
 
 def main():
-    test_url_one = 'https://en.wikipedia.org/wiki/Leopard_1'
-    test_url_two = 'https://www.lipsum.com/'
+    url = 'https://www.crummy.com/software/BeautifulSoup/bs4/doc/'
 
-    email_links = getEmails(test_url_two)
-    phone_links = getPhoneNumbers(test_url_two)
+    test_html = getSiteHtml(url)
 
-    url_one = getSiteHtml(test_url_one)
+    print('---Sample HTML---\n',test_html)
 
-    lamda_tag_test = url_one.find_all(lambda tag: tag.get_text() == 'Leopard 1')
+    print('\n---HREF Extraction---\n',*getLinks(url), sep='\n')
 
-    print(*getLinks(test_url_one), sep=' \n')
-    print('This code is still being tested and worked on')
+    print('\n---Phone Extraction---\n',*getPhoneNumbers(url), sep='\n')
+
+    print('\n---Email Extraction---\n', *getEmails(url), sep='\n')
+
+
 
 if __name__ == '__main__':
     main()
