@@ -71,9 +71,8 @@ def getPhoneNumbers(url):
 
 def getLinks(url):
     html_code = getSiteHtml(url)
-    http_format = re.compile('/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/')
-    url_format = re.compile('/^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/')
-    return [x.attrs['href'] for x in html_code.find_all(lambda tag: hasHref(tag.attrs))]
+    links = [x.attrs['href'] for x in html_code.find_all((lambda tag: hasHref(tag.attrs)))]
+    return (["None"] if isEmpty(links) == True else links)
 
 def getParents(tag, attribute,url):
     html_code = getSiteHtml(url)
@@ -125,18 +124,19 @@ def getPreviousSibling(tag,attribute,url):
 def main():
     url = 'https://en.wikipedia.org/wiki/M26_Pershing'
 
-    print('\n---Title---\n', getTitle(url))
+    print('\n---Title---\n', getTitle(url), sep='\n')
 
-    print('\n---Number of tags---\n', numTags(urlopen(url)))
+    print('\n---Number of tags---\n', numTags(urlopen(url)), sep='\n')
 
-    print('\n---Sample HTML---\n',getSiteHtml(url))
+    print('\n---Sample HTML---\n',getSiteHtml(url), sep='\n')
+
+    print('\n---Website---\n',getSiteHtml(url).get_text(), sep='\n')
 
     print('\n---HREF Extraction---\n',*getLinks(url), sep='\n')
 
     print('\n---Phone Extraction---\n',*getPhoneNumbers(url), sep='\n')
 
     print('\n---Email Extraction---\n', *getEmails(url), sep='\n')
-
 
 if __name__ == '__main__':
     main()
