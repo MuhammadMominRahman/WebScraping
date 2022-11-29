@@ -1,9 +1,15 @@
-# Must include the following
+'''
+Necessary libraries for this program to function. BeautifulSoup must be installed locally; to do so, type pip install bs4 into your
+terminal.
+'''
 from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
 from bs4 import BeautifulSoup
 import re
 
+'''
+Getter methods used to extract specific data from an html source
+'''
 def getTitle(url):
     try:
         # Default
@@ -76,14 +82,6 @@ def getLinks(url):
     url_format = re.compile('/^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/')
     return [x.attrs['href'] for x in html_code.find_all(lambda tag: hasHref(tag.attrs))]
 
-def hasHref(attribute_list):
-    bool = False
-    for i in attribute_list:
-        if i == 'href':
-            bool = True
-            break
-    return bool
-
 def getParents(tag, attribute,url):
     html_code = getSiteHtml(url)
     return [x for x in html_code.find(tag, attribute).parents]
@@ -95,8 +93,20 @@ def getNextSiblings(tag, attribute, url):
 def getPreviousSiblings(tag,attribute,url):
     html_code = getSiteHtml(url)
     return [x for x in html_code.find(tag, attribute).previous_siblings]
+
+'''
+Boolean methods
+'''
 def isEmpty(some_list):
     return (True if len(some_list) == 0 else False)
+def hasHref(attribute_list):
+    bool = False
+    for i in attribute_list:
+        if i == 'href':
+            bool = True
+            break
+    return bool
+
 '''
 Redundant methods
 '''
@@ -112,11 +122,9 @@ def getPreviousSibling(tag,attribute,url):
 def main():
     url = 'https://en.wikipedia.org/wiki/76_mm_tank_gun_M1940_F-34'
 
-    test_html = getSiteHtml(url)
-
     print('\n---Title---\n', getTitle(url))
 
-    print('\n---Sample HTML---\n',test_html)
+    print('\n---Sample HTML---\n',getSiteHtml(url))
 
     print('\n---HREF Extraction---\n',*getLinks(url), sep='\n')
 
@@ -125,12 +133,12 @@ def main():
     print('\n---Email Extraction---\n', *getEmails(url), sep='\n')
 
 
-
 if __name__ == '__main__':
     main()
 
 '''
-Cheat sheet:
+
+Personal Cheat Sheet:
 
 html_code = BeautifulSoup(urlopen(url), 'html.parser') --> returns the html code of a website
 
