@@ -7,9 +7,8 @@ import re
 def getTitle(url):
     try:
         # Default
-        html = urlopen(url)
-        bs = BeautifulSoup(html, 'html.parser')
-        page_title = bs.title
+        html_code = getSiteHtml(url)
+        page_title = html_code.title
     except HTTPError as e:
         print(e)
     except URLError as f:
@@ -17,7 +16,7 @@ def getTitle(url):
     except AttributeError as g:
         print('Tag was not found')
     else:
-        return page_title
+        return page_title.get_text()
 
 
 def getSiteHtml(url):
@@ -111,11 +110,13 @@ def getPreviousSibling(tag,attribute,url):
     return html_code.find(tag, attribute).previous_sibling
 
 def main():
-    url = 'https://www.crummy.com/software/BeautifulSoup/bs4/doc/'
+    url = 'https://people.eecs.ku.edu/~demarest/'
 
     test_html = getSiteHtml(url)
 
-    print('---Sample HTML---\n',test_html)
+    print('\n---Title---\n', getTitle(url))
+
+    print('\n---Sample HTML---\n',test_html)
 
     print('\n---HREF Extraction---\n',*getLinks(url), sep='\n')
 
