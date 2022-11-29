@@ -110,7 +110,7 @@ def getPreviousSibling(tag,attribute,url):
     return html_code.find(tag, attribute).previous_sibling
 
 def main():
-    url = 'https://people.eecs.ku.edu/~demarest/'
+    url = 'https://en.wikipedia.org/wiki/76_mm_tank_gun_M1940_F-34'
 
     test_html = getSiteHtml(url)
 
