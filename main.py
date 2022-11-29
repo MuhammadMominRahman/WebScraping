@@ -73,7 +73,9 @@ def getPhoneNumbers(url):
 
 def getLinks(url):
     html_code = getSiteHtml(url)
-    return html_code.find_all(lambda tag: hasHref(tag.attrs))
+    http_format = re.compile('/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/')
+    url_format = re.compile('/^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/')
+    return [x.attrs['href'] for x in html_code.find_all(lambda tag: hasHref(tag.attrs))]
 
 def hasHref(attribute_list):
     bool = False
@@ -118,7 +120,7 @@ def main():
 
     lamda_tag_test = url_one.find_all(lambda tag: tag.get_text() == 'Leopard 1')
 
-    print(getLinks(test_url_one))
+    print(*getLinks(test_url_one), sep=' \n')
     print('This code is still being tested and worked on')
 
 if __name__ == '__main__':
