@@ -13,6 +13,9 @@ class Executive:
     '''
     def __init__(self):
         self = None
+        self.email_format = re.compile('[A-Za-z0-9\._+]+@[A-Za-z]+\.(com|org|edu|net)')
+        self.number_format = re.compile('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
+
 
     def start(self):
         user_input = input('Paste a valid url: \n')
@@ -95,14 +98,12 @@ class Executive:
 
     def getEmails(self, url):
         html_code = self.getSiteHtml(url)
-        email_format = re.compile('[A-Za-z0-9\._+]+@[A-Za-z]+\.(com|org|edu|net)')
-        emails = [x.strip(' \n') for x in html_code.find_all(text=email_format)]
+        emails = [x.strip(' \n') for x in html_code.find_all(text=self.email_format)]
         return (["None"] if self.isEmpty(emails) == True else emails)
 
     def getPhoneNumbers(self, url):
         html_code = self.getSiteHtml(url)
-        number_format = re.compile('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
-        numbers = [x.strip(' \n') for x  in html_code.find_all(text=number_format)]
+        numbers = [x.strip(' \n') for x  in html_code.find_all(text=self.number_format)]
         return (["None"] if self.isEmpty(numbers) == True else numbers)
 
     def getLinks(self, url):
@@ -144,6 +145,12 @@ class Executive:
         for i in html_code:
             count += 1
         return count
+
+    '''
+    Test methods
+    '''
+    def execFunc(self, function, param_one, param_two):
+        return function(param_one, param_two)
 
     '''
     Redundant methods
