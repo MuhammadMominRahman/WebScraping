@@ -6,12 +6,16 @@ from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
 from bs4 import BeautifulSoup
 import re
+import sys
+import subprocess
+import requests
 
 class Executive:
     '''
     Getter methods used to extract specific data from an html source
     '''
     def __init__(self):
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
         self = None
         self.email_format = re.compile('[A-Za-z0-9\._+]+@[A-Za-z]+\.(com|org|edu|net)')
         self.number_format = re.compile('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
@@ -119,7 +123,7 @@ class Executive:
         html_code = self.getSiteHtml(url)
         return [x for x in html_code.find(tag, attribute).next_siblings]
 
-    def getPreviousSiblings(self, tag,attribute,url):
+    def getPreviousSiblings(self, tag, attribute, url):
         html_code = self.getSiteHtml(url)
         return [x for x in html_code.find(tag, attribute).previous_siblings]
 
@@ -151,6 +155,11 @@ class Executive:
     '''
     def execFunc(self, function, param_one, param_two):
         return function(param_one, param_two)
+
+    def valid_links(self, link):
+        req = requests.get(link)
+        if (req.status_code == '200'):
+            print('HTTP request successful')
 
     '''
     Redundant methods
