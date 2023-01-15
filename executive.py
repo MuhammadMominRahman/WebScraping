@@ -16,7 +16,6 @@ class Executive:
     '''
     def __init__(self):
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
-        self = None
         self.email_format = re.compile('[A-Za-z0-9\._+]+@[A-Za-z]+\.(com|org|edu|net)')
         self.number_format = re.compile('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
 
@@ -39,7 +38,7 @@ class Executive:
             elif choice == '2':
                 print(self.specificTags())
             elif choice == '3':
-                print(self.getLinks(inp))
+                print(*self.getLinks(inp), sep='\n')
             elif choice == '4':
                 print(self.getEmails(inp))
             elif choice == '5':
